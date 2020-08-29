@@ -1,6 +1,9 @@
 # Arduino Aquascape Controller
 
-This project aims to control the brightness of the lights by imitating a sunrise-sunset based on RTC and also control some other equipment using some relays.
+# Features
+- Real Time Clock based Controller
+- Control the brightness of the DIY High Powered LED by imitating a sunrise-sunset
+- Control some other equipment using relays
 
 # Component that I use in this project:
 - Arduino Uno
