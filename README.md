@@ -7,5 +7,5 @@ This project aims to control the brightness of the lights by imitating a sunrise
 - MOSFET PWM Module
 - DS3231 RTC Module
 - Breadboard
-- 4 Channel Relay
-- Some Jumper Wires
+- Relay Module
+- Some Jumper Wire
