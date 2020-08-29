@@ -1,27 +1,30 @@
-#include <DS3231.h> //Include the clock library
+// Coder     : Rizky Firmansyah Alif, t.me/rizkyfirst
+
+
+#include <DS3231.h> //RTC library
 #include <Wire.h>
 
-// Changable Vars
+// Variabel Pengaturan
 int fadeTimeOn  = 90; // Jeda waktu nyala 0 - 100% brightness (menit)
 int fadeTimeOff = 90; // Jeda waktu mati  100 - 0% brightnes (menit)
-int setHourOn   =  5; // Set hours to wake (military time / Format 24 jam)
-int setMinOn    = 45; // Set minute to wake
-int setHourOff  = 17; // Set hours off
-int setMinOff   = 55; // Set minute off
+int setHourOn   =  5; // Jam   untuk lampu nyala (Format 24 jam)
+int setMinOn    = 45; // Menit untuk lampu nyala
+int setHourOff  = 17; // Jam   untuk lampu mati
+int setMinOff   = 55; // Menit untuk lampu mati
 
-// Set up Vars
+// Variabel Setup
 #define led 3   //Pin PWM    untuk Lampu Dimmable
-#define r1 A0   //Pin Analog untuk Relay 1 (lampu kecil)
-#define r2 A1   //Pin Analog untuk Relay 2 (ATO)
-#define r3 A2   //Pin Analog untuk Relay 3 (Aerator)
-#define r4 A3   //Pin Analog untuk Relay 4 (lampu besar)
+#define r1 A0   //Pin Analog untuk Relay 1 (Auto Top Off)
+#define r2 A1   //Pin Analog untuk Relay 2 (Aerator)
 
 bool on=LOW;
 bool off=HIGH;
 
 DS3231  rtc(SDA, SCL);
 Time t;
+void siang();
 void malam();
+
 void setup()
 {
   pinMode(led, OUTPUT);
@@ -31,9 +34,7 @@ void setup()
   
   pinMode(r1,OUTPUT);
   pinMode(r2,OUTPUT);
-  pinMode(r3,OUTPUT);
-  pinMode(r4,OUTPUT);
-  //malam();
+  
   if ((t.hour>setHourOn)&&(t.hour<setHourOff))
   {
     siang();
@@ -68,23 +69,18 @@ delay(1000);
 void siang()
 {
   digitalWrite(r1,on);
-  digitalWrite(r2,on);
-  digitalWrite(r3,off);
-  digitalWrite(r4,on);
+  digitalWrite(r2,off);
 }
 
 void malam()
 {
   digitalWrite(r1,off);
-  digitalWrite(r2,off);
-  digitalWrite(r3,on);
-  digitalWrite(r4,off);
+  digitalWrite(r2,on);
 }
 
 void startOn()
 {
   digitalWrite(r1,on);
-  digitalWrite(r2,on);
 
   analogWrite(led, 0);
   delay(fadeTimeOn*240);
@@ -96,20 +92,14 @@ void startOn()
   Serial.print(i);
   Serial.print("    ");
   }
-  delay(30000);
-  analogWrite(led, 0);
-  digitalWrite(r3,off);
-  digitalWrite(r4,on);
+  digitalWrite(r2,off);
 }
 
 void startOff()
 { 
   digitalWrite(r1,off);
-  digitalWrite(r2,off);
-  digitalWrite(r3,on);
-  digitalWrite(r4,off);
-  analogWrite(led,255);
-  delay(30000); 
+  digitalWrite(r2,on);
+  
   for (int i = 255 ; i >= 0; i--)
   {
     analogWrite(led, i);
